@@ -13,10 +13,9 @@ button { font-family: 'Montserrat', sans-serif; font-weight: 400; text-transform
 .start-btn:hover { background: #c65c5c !important; }
 .timer { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #779496; }
 .question-screen { display: none; flex-direction: column; justify-content: center; min-height: 100vh; padding: 3rem 2rem; max-width: 760px; margin: 0 auto; }
-.q-badge { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; background: #c65c5c; border-radius: 4px; font-family: 'Montserrat', sans-serif; font-weight: 400; font-size: 13px; color: #efe6dd !important; margin-bottom: 20px; }
-.q-title { font-family: 'Oranienbaum', serif; font-weight: 400; font-size: 26px; color: #c65c5c; margin-bottom: 8px; line-height: 1.4; }
-.q-desc { font-family: 'DM Sans', sans-serif; font-size: 14px; color: #779496; font-style: italic; margin-bottom: 32px; }
-textarea { width: 100%; background: transparent; border: none; border-bottom: 1.5px solid #779496; color: #779496; font-family: 'DM Sans', sans-serif; font-size: 16px; padding: 8px 0; resize: none; outline: none; min-height: 64px; caret-color: #ff5757; transition: border-color 0.2s; }
+.q-section { font-family: 'Montserrat', sans-serif; font-weight: 400; font-size: 11px; text-transform: uppercase; letter-spacing: 0.18em; color: #779496; margin-bottom: 16px; }
+.q-title { font-family: 'DM Sans', sans-serif; font-weight: 400; font-size: 22px; color: #efe6dd; margin-bottom: 32px; line-height: 1.5; }
+textarea { width: 100%; background: transparent; border: none; border-bottom: 1.5px solid #c65c5c; color: #779496; font-family: 'DM Sans', sans-serif; font-size: 16px; padding: 8px 0; resize: none; outline: none; min-height: 64px; caret-color: #ff5757; transition: border-color 0.2s; }
 textarea:focus { border-bottom-color: #ff5757; }
 textarea::placeholder { color: rgba(119,148,150,0.4); }
 .hint { font-family: 'DM Sans', sans-serif; font-size: 12px; color: #779496; margin-top: 8px; }
@@ -42,9 +41,8 @@ textarea::placeholder { color: rgba(119,148,150,0.4); }
     <span class="timer">⏱ Takes about 15 minutes</span>
   </div>
   <div class="question-screen" id="qscreen">
-    <div class="q-badge" id="qnum">1</div>
+    <div class="q-section" id="qsection"></div>
     <div class="q-title" id="qtitle"></div>
-    <div class="q-desc">Descripción (opcional)</div>
     <textarea id="qinput" rows="3" placeholder="Escribe tu respuesta aquí..."></textarea>
     <div class="hint">Shift ⇧ + Enter ↵ para hacer un salto de línea</div>
     <div class="nav">
@@ -66,21 +64,25 @@ textarea::placeholder { color: rgba(119,148,150,0.4); }
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyHdbmx5bmka6FYDIPvDN_-EbtlVfdLNPuvldt-zN1aG6R0j4KKnIRF2DVA_H1YfGIK/exec";
 
 const questions = [
-  "¿Qué te llevó a elegir la odontología y qué momento te hizo querer ir más allá de simplemente practicarla?",
-  "¿Por qué quieres ser reconocido en 10 años, tanto en la clínica como en el escenario?",
-  "¿Cómo describes lo que haces cuando conoces a alguien en una cena versus en un congreso dental?",
-  "¿Qué es lo que más te frustra de cómo se enseña o practica la odontología hoy en día?",
-  "¿Dónde sientes que tu tiempo o energía se desperdicia más en este momento?",
-  "¿Qué errores cometen otros dentistas que desearías poder corregir?",
-  "¿Cuáles son los mayores miedos o malentendidos con los que llegan tus pacientes?",
-  "¿Qué resultado hace que un paciente vuelva y recomiende a un amigo?",
-  "¿Cómo es tu paciente ideal y cómo te encuentra?",
-  "¿Qué vacío en la formación necesitan cubrir más urgentemente tus colegas cuando asisten a tus cursos?",
-  "¿Qué transformación quieres que un dentista se lleve tras asistir a una de tus conferencias?",
-  "¿Quién es tu alumno ideal y cómo se ve el éxito para él 6 meses después?",
-  "Si tu marca personal fuera una sola palabra o sensación, ¿cuál sería?",
-  "¿Dónde te ves posicionado en 3 años: más como clínico, educador o líder de opinión?",
-  "¿Qué haría que consideraras este capítulo de tu carrera un verdadero éxito?"
+  { section: "Inicios", q: "¿Qué te llevó a elegir la odontología?" },
+  { section: "Inicios", q: "¿Qué momento te hizo querer ir más allá dentro de la práctica?" },
+  { section: "Inicios", q: "¿Cuál es la parte de tu trabajo que te da más energía?" },
+  { section: "Pain Points", q: "¿Qué es lo que más te frustra de cómo se enseña o practica la odontología hoy en día?" },
+  { section: "Pain Points", q: "¿Dónde sientes que tu tiempo o energía se desperdicia más en este momento?" },
+  { section: "Pain Points", q: "¿Qué errores cometen otros dentistas que desearías poder corregir?" },
+  { section: "Pacientes", q: "¿Cuáles son los mayores miedos o malentendidos con los que llegan tus pacientes?" },
+  { section: "Pacientes", q: "¿Qué resultado hace que un paciente vuelva y recomiende a un amigo?" },
+  { section: "Pacientes", q: "Dos características de tu paciente ideal y cómo te encuentra" },
+  { section: "Pacientes", q: "¿Cuáles son los casos más frecuentes que tratas?" },
+  { section: "Pacientes", q: "¿Cuáles son los casos más transformadores que has vivido?" },
+  { section: "Pacientes", q: "¿Has notado alguna nueva tendencia en el tipo de casos por los que la gente empieza a venir?" },
+  { section: "Pacientes", q: "¿Cómo pueden pequeños cambios en odontología tener un gran impacto en la salud general de una persona?" },
+  { section: "Dentistas & Profesionales", q: "¿Qué vacío en la formación necesitan cubrir más urgentemente tus colegas cuando asisten a tus cursos?" },
+  { section: "Dentistas & Profesionales", q: "¿Qué transformación quieres que un dentista se lleve tras asistir a una de tus conferencias?" },
+  { section: "Dentistas & Profesionales", q: "¿Quién es tu alumno ideal y cómo se ve el éxito para él 6 meses después?" },
+  { section: "Visión & Marca Personal", q: "Si tu marca personal fuera una sola palabra o sensación, ¿cuál sería?" },
+  { section: "Visión & Marca Personal", q: "¿Dónde te ves posicionado en 3 años: más como clínico, educador o líder de opinión?" },
+  { section: "Visión & Marca Personal", q: "¿Qué haría que consideraras este capítulo de tu carrera un verdadero éxito?" }
 ];
 
 let current = 0;
@@ -94,8 +96,8 @@ function startForm() {
 }
 
 function showQuestion() {
-  document.getElementById("qnum").textContent = current + 1;
-  document.getElementById("qtitle").textContent = questions[current];
+  document.getElementById("qsection").textContent = questions[current].section;
+  document.getElementById("qtitle").textContent = questions[current].q;
   document.getElementById("qinput").value = answers[current];
   document.getElementById("btnPrev").style.visibility = current === 0 ? "hidden" : "visible";
   document.getElementById("btnNext").textContent = current === questions.length - 1 ? "Finalizar ✓" : "OK ✓";
@@ -119,7 +121,7 @@ function submitAnswers() {
   document.getElementById("endscreen").style.display = "flex";
   document.getElementById("progressbar").style.display = "none";
   document.getElementById("sendingstatus").textContent = "Enviando...";
-  const payload = { answers: questions.map((q, i) => ({ question: q, answer: answers[i] || "" })) };
+  const payload = { answers: questions.map((q, i) => ({ question: q.q, answer: answers[i] || "" })) };
   fetch(SCRIPT_URL, {
     method: "POST",
     mode: "no-cors",
