@@ -1,0 +1,321 @@
+
+<link href="https://fonts.googleapis.com/css2?family=Oranienbaum&family=Montserrat:wght@400;600;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; color: inherit; }
+
+.form-wrap {
+  background: #004449;
+  min-height: 100vh;
+  font-family: 'DM Sans', sans-serif;
+  color: #779496;
+}
+
+.welcome-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  text-align: center;
+  padding: 2rem;
+}
+
+.welcome-screen h1 {
+  font-family: 'Oranienbaum', serif;
+  font-weight: 400;
+  font-size: 38px;
+  color: #c65c5c;
+  margin-bottom: 12px;
+  line-height: 1.2;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.welcome-screen p {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  color: #779496;
+  margin-bottom: 36px;
+}
+
+button {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.start-btn {
+  background: #c65c5c;
+  color: #004449 !important;
+  padding: 14px 40px;
+  font-size: 14px;
+  margin-bottom: 14px;
+  transition: background 0.2s;
+  display: block;
+}
+
+.start-btn:hover { background: #ff5757; }
+
+.timer {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: #779496;
+}
+
+.question-screen {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 3rem 2rem;
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.q-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: #c65c5c;
+  border-radius: 4px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  color: #004449 !important;
+  margin-bottom: 20px;
+}
+
+.q-title {
+  font-family: 'Oranienbaum', serif;
+  font-weight: 400;
+  font-size: 26px;
+  color: #c65c5c;
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.q-desc {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: #779496;
+  font-style: italic;
+  margin-bottom: 32px;
+}
+
+textarea {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1.5px solid #779496;
+  color: #779496;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  padding: 8px 0;
+  resize: none;
+  outline: none;
+  min-height: 64px;
+  caret-color: #ff5757;
+  transition: border-color 0.2s;
+}
+
+textarea:focus { border-bottom-color: #ff5757; }
+textarea::placeholder { color: rgba(119,148,150,0.4); }
+
+.hint {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  color: #779496;
+  margin-top: 8px;
+}
+
+.nav {
+  display: flex;
+  gap: 12px;
+  margin-top: 40px;
+}
+
+.btn-next {
+  background: #c65c5c;
+  color: #004449 !important;
+  padding: 11px 28px;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  transition: background 0.2s;
+}
+
+.btn-next:hover { background: #ff5757; }
+
+.btn-prev {
+  background: transparent;
+  color: #779496 !important;
+  border: 1.5px solid #779496;
+  padding: 11px 28px;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.btn-prev:hover { border-color: #c65c5c; color: #c65c5c !important; }
+
+.progress {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: 3px;
+  background: rgba(119,148,150,0.15);
+}
+
+.progress-fill {
+  height: 100%;
+  background: #c65c5c;
+  transition: width 0.3s ease;
+}
+
+.end-screen {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  text-align: center;
+  padding: 2rem;
+}
+
+.end-screen h2 {
+  font-family: 'Oranienbaum', serif;
+  font-weight: 400;
+  font-size: 34px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #c65c5c;
+  margin-bottom: 12px;
+}
+
+.end-screen p {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  color: #779496;
+  margin-bottom: 32px;
+}
+
+.btn-copy {
+  background: #c65c5c;
+  color: #004449 !important;
+  padding: 14px 36px;
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  transition: background 0.2s;
+}
+
+.btn-copy:hover { background: #ff5757; }
+</style>
+
+<div class="form-wrap">
+
+  <div class="welcome-screen" id="welcome">
+    <h1>Dr. Chéron<br>Brand Discovery</h1>
+    <p>Help us understand your brand, your clients, and your vision</p>
+    <button class="start-btn" onclick="startForm()">Start</button>
+    <span class="timer">⏱ Takes about 15 minutes</span>
+  </div>
+
+  <div class="question-screen" id="qscreen">
+    <div class="q-badge" id="qnum">1</div>
+    <div class="q-title" id="qtitle"></div>
+    <div class="q-desc">Description (optional)</div>
+    <textarea id="qinput" rows="3" placeholder="Type your answer here..."></textarea>
+    <div class="hint">Shift ⇧ + Enter ↵ to make a line break</div>
+    <div class="nav">
+      <button class="btn-prev" id="btnPrev" onclick="prev()">← Back</button>
+      <button class="btn-next" onclick="next()" id="btnNext">OK ✓</button>
+    </div>
+  </div>
+
+  <div class="end-screen" id="endscreen">
+    <h2>Merci,<br>Dr. Chéron</h2>
+    <p>Your answers are ready. Click below to copy everything.</p>
+    <button class="btn-copy" onclick="copyAll()">Copy all answers</button>
+  </div>
+
+  <div class="progress" id="progressbar" style="display:none;">
+    <div class="progress-fill" id="progressfill"></div>
+  </div>
+
+</div>
+
+<script>
+const questions = [
+  "What made you choose dentistry, and what moment made you want to go beyond just practicing it?",
+  "What do you want to be known for in 10 years, both in the operatory and on stage?",
+  "How do you describe what you do when you meet someone at a dinner party versus a dental congress?",
+  "What frustrates you most about how dentistry is currently taught or practiced?",
+  "Where do you feel your time or energy is most wasted right now?",
+  "What do other dentists get wrong that you wish you could fix?",
+  "What are the biggest fears or misconceptions your patients come in with?",
+  "What result makes a patient come back and refer a friend?",
+  "What does a dream patient look like, and how do they find you?",
+  "What gap in training are colleagues most desperate to fill when they attend your courses?",
+  "What transformation do you want a dentist to walk away with after one of your conferences?",
+  "Who is your ideal course attendee, and what does success look like for them 6 months later?",
+  "If your personal brand were a single word or feeling, what would it be?",
+  "Where do you see yourself positioned in 3 years: more clinician, educator, or thought leader?",
+  "What would make you consider this chapter of your career a real success?"
+];
+
+let current = 0;
+const answers = new Array(questions.length).fill("");
+
+function startForm() {
+  document.getElementById("welcome").style.display = "none";
+  document.getElementById("qscreen").style.display = "flex";
+  document.getElementById("progressbar").style.display = "block";
+  showQuestion();
+}
+
+function showQuestion() {
+  document.getElementById("qnum").textContent = current + 1;
+  document.getElementById("qtitle").textContent = questions[current];
+  document.getElementById("qinput").value = answers[current];
+  document.getElementById("btnPrev").style.visibility = current === 0 ? "hidden" : "visible";
+  document.getElementById("btnNext").textContent = current === questions.length - 1 ? "Finish ✓" : "OK ✓";
+  document.getElementById("progressfill").style.width = (((current + 1) / questions.length) * 100) + "%";
+  document.getElementById("qinput").focus();
+}
+
+function next() {
+  answers[current] = document.getElementById("qinput").value;
+  if (current < questions.length - 1) { current++; showQuestion(); }
+  else {
+    document.getElementById("qscreen").style.display = "none";
+    document.getElementById("endscreen").style.display = "flex";
+    document.getElementById("progressbar").style.display = "none";
+  }
+}
+
+function prev() {
+  answers[current] = document.getElementById("qinput").value;
+  if (current > 0) { current--; showQuestion(); }
+}
+
+document.addEventListener("keydown", function(e) {
+  if (e.key === "Enter" && !e.shiftKey && document.getElementById("qscreen").style.display === "flex") {
+    e.preventDefault(); next();
+  }
+});
+
+function copyAll() {
+  let text = "DR. CHÉRON — BRAND DISCOVERY\n\n";
+  questions.forEach((q, i) => {
+    text += `Q${i+1}: ${q}\n${answers[i] || "(no answer)"}\n\n`;
+  });
+  navigator.clipboard.writeText(text).then(() => {
+    document.querySelector(".btn-copy").textContent = "Copied!";
+  });
+}
+</script>
