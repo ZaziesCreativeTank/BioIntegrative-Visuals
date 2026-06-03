@@ -1,0 +1,140 @@
+
+<link href="https://fonts.googleapis.com/css2?family=Oranienbaum&family=Montserrat:wght@400&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; color: inherit; }
+.form-wrap { background: #004449; min-height: 100vh; font-family: 'DM Sans', sans-serif; color: #779496; }
+.welcome-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; text-align: center; padding: 2rem; }
+.welcome-screen h1 { font-family: 'Oranienbaum', serif; font-weight: 400; font-size: clamp(22px, 3.5vw, 36px); color: #efe6dd; margin-bottom: 14px; line-height: 1.2; text-transform: uppercase; letter-spacing: 0.05em; white-space: nowrap; }
+.welcome-screen h2 { font-family: 'Montserrat', sans-serif; font-weight: 400; font-size: 15px; color: #efe6dd; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 14px; }
+.welcome-screen p { font-family: 'DM Sans', sans-serif; font-size: 16px; color: #779496; margin-bottom: 36px; }
+button { font-family: 'Montserrat', sans-serif; font-weight: 400; text-transform: uppercase; letter-spacing: 0.1em; border: none; border-radius: 4px; cursor: pointer; }
+.start-btn { background: #ff5757 !important; color: #efe6dd !important; padding: 14px 40px; font-size: 14px; margin-bottom: 14px; transition: background 0.2s; display: block; }
+.start-btn:hover { background: #c65c5c !important; }
+.timer { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #779496; }
+.question-screen { display: none; flex-direction: column; justify-content: center; min-height: 100vh; padding: 3rem 2rem; max-width: 760px; margin: 0 auto; }
+.q-badge { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; background: #c65c5c; border-radius: 4px; font-family: 'Montserrat', sans-serif; font-weight: 400; font-size: 13px; color: #efe6dd !important; margin-bottom: 20px; }
+.q-title { font-family: 'Oranienbaum', serif; font-weight: 400; font-size: 26px; color: #c65c5c; margin-bottom: 8px; line-height: 1.4; }
+.q-desc { font-family: 'DM Sans', sans-serif; font-size: 14px; color: #779496; font-style: italic; margin-bottom: 32px; }
+textarea { width: 100%; background: transparent; border: none; border-bottom: 1.5px solid #779496; color: #779496; font-family: 'DM Sans', sans-serif; font-size: 16px; padding: 8px 0; resize: none; outline: none; min-height: 64px; caret-color: #ff5757; transition: border-color 0.2s; }
+textarea:focus { border-bottom-color: #ff5757; }
+textarea::placeholder { color: rgba(119,148,150,0.4); }
+.hint { font-family: 'DM Sans', sans-serif; font-size: 12px; color: #779496; margin-top: 8px; }
+.nav { display: flex; gap: 12px; margin-top: 40px; }
+.btn-next { background: #c65c5c; color: #efe6dd !important; padding: 11px 28px; font-size: 13px; letter-spacing: 0.08em; transition: background 0.2s; }
+.btn-next:hover { background: #ff5757; }
+.btn-prev { background: transparent; color: #779496 !important; border: 1.5px solid #779496; padding: 11px 28px; font-size: 13px; letter-spacing: 0.06em; transition: border-color 0.2s, color 0.2s; }
+.btn-prev:hover { border-color: #c65c5c; color: #c65c5c !important; }
+.progress { position: fixed; bottom: 0; left: 0; right: 0; height: 3px; background: rgba(119,148,150,0.15); }
+.progress-fill { height: 100%; background: #c65c5c; transition: width 0.3s ease; }
+.end-screen { display: none; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; text-align: center; padding: 2rem; }
+.end-screen h2 { font-family: 'Oranienbaum', serif; font-weight: 400; font-size: 34px; text-transform: uppercase; letter-spacing: 0.05em; color: #c65c5c; margin-bottom: 12px; }
+.end-screen p { font-family: 'DM Sans', sans-serif; font-size: 15px; color: #779496; margin-bottom: 32px; }
+.sending { font-family: 'DM Sans', sans-serif; font-size: 14px; color: #779496; margin-top: 16px; }
+</style>
+
+<div class="form-wrap">
+  <div class="welcome-screen" id="welcome">
+    <h1>Welcome to Zazie's Creative World!</h1>
+    <h2>Dr. Chéron Personal Brand</h2>
+    <p>Please answer a few brief questions</p>
+    <button class="start-btn" onclick="startForm()">Start</button>
+    <span class="timer">⏱ Takes about 15 minutes</span>
+  </div>
+  <div class="question-screen" id="qscreen">
+    <div class="q-badge" id="qnum">1</div>
+    <div class="q-title" id="qtitle"></div>
+    <div class="q-desc">Descripción (opcional)</div>
+    <textarea id="qinput" rows="3" placeholder="Escribe tu respuesta aquí..."></textarea>
+    <div class="hint">Shift ⇧ + Enter ↵ para hacer un salto de línea</div>
+    <div class="nav">
+      <button class="btn-prev" id="btnPrev" onclick="prev()">← Atrás</button>
+      <button class="btn-next" onclick="next()" id="btnNext">OK ✓</button>
+    </div>
+  </div>
+  <div class="end-screen" id="endscreen">
+    <h2>Merci,<br>Dr. Chéron</h2>
+    <p>Tus respuestas han sido guardadas. ¡Gracias!</p>
+    <div class="sending" id="sendingstatus"></div>
+  </div>
+  <div class="progress" id="progressbar" style="display:none;">
+    <div class="progress-fill" id="progressfill"></div>
+  </div>
+</div>
+
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyHdbmx5bmka6FYDIPvDN_-EbtlVfdLNPuvldt-zN1aG6R0j4KKnIRF2DVA_H1YfGIK/exec";
+
+const questions = [
+  "¿Qué te llevó a elegir la odontología y qué momento te hizo querer ir más allá de simplemente practicarla?",
+  "¿Por qué quieres ser reconocido en 10 años, tanto en la clínica como en el escenario?",
+  "¿Cómo describes lo que haces cuando conoces a alguien en una cena versus en un congreso dental?",
+  "¿Qué es lo que más te frustra de cómo se enseña o practica la odontología hoy en día?",
+  "¿Dónde sientes que tu tiempo o energía se desperdicia más en este momento?",
+  "¿Qué errores cometen otros dentistas que desearías poder corregir?",
+  "¿Cuáles son los mayores miedos o malentendidos con los que llegan tus pacientes?",
+  "¿Qué resultado hace que un paciente vuelva y recomiende a un amigo?",
+  "¿Cómo es tu paciente ideal y cómo te encuentra?",
+  "¿Qué vacío en la formación necesitan cubrir más urgentemente tus colegas cuando asisten a tus cursos?",
+  "¿Qué transformación quieres que un dentista se lleve tras asistir a una de tus conferencias?",
+  "¿Quién es tu alumno ideal y cómo se ve el éxito para él 6 meses después?",
+  "Si tu marca personal fuera una sola palabra o sensación, ¿cuál sería?",
+  "¿Dónde te ves posicionado en 3 años: más como clínico, educador o líder de opinión?",
+  "¿Qué haría que consideraras este capítulo de tu carrera un verdadero éxito?"
+];
+
+let current = 0;
+const answers = new Array(questions.length).fill("");
+
+function startForm() {
+  document.getElementById("welcome").style.display = "none";
+  document.getElementById("qscreen").style.display = "flex";
+  document.getElementById("progressbar").style.display = "block";
+  showQuestion();
+}
+
+function showQuestion() {
+  document.getElementById("qnum").textContent = current + 1;
+  document.getElementById("qtitle").textContent = questions[current];
+  document.getElementById("qinput").value = answers[current];
+  document.getElementById("btnPrev").style.visibility = current === 0 ? "hidden" : "visible";
+  document.getElementById("btnNext").textContent = current === questions.length - 1 ? "Finalizar ✓" : "OK ✓";
+  document.getElementById("progressfill").style.width = (((current + 1) / questions.length) * 100) + "%";
+  document.getElementById("qinput").focus();
+}
+
+function next() {
+  answers[current] = document.getElementById("qinput").value;
+  if (current < questions.length - 1) { current++; showQuestion(); }
+  else { submitAnswers(); }
+}
+
+function prev() {
+  answers[current] = document.getElementById("qinput").value;
+  if (current > 0) { current--; showQuestion(); }
+}
+
+function submitAnswers() {
+  document.getElementById("qscreen").style.display = "none";
+  document.getElementById("endscreen").style.display = "flex";
+  document.getElementById("progressbar").style.display = "none";
+  document.getElementById("sendingstatus").textContent = "Enviando...";
+  const payload = { answers: questions.map((q, i) => ({ question: q, answer: answers[i] || "" })) };
+  fetch(SCRIPT_URL, {
+    method: "POST",
+    mode: "no-cors",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  }).then(() => {
+    document.getElementById("sendingstatus").textContent = "✓ Respuestas recibidas.";
+  }).catch(() => {
+    document.getElementById("sendingstatus").textContent = "Algo salió mal. Por favor contáctanos.";
+  });
+}
+
+document.addEventListener("keydown", function(e) {
+  if (e.key === "Enter" && !e.shiftKey && document.getElementById("qscreen").style.display === "flex") {
+    e.preventDefault(); next();
+  }
+});
+</script>
